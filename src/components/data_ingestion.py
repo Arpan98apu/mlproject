@@ -7,6 +7,9 @@ from src.logger import logging
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 
 @dataclass
 class DataIngestionConfig:
@@ -18,16 +21,20 @@ class DataIngestion:
     def __init__(self):
         self.ingestion_config=DataIngestionConfig()
 
-    def initate_data_ingestion(self):
+    def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
 
         try:
             df=pd.read_csv('notebook\data\StudentsPerformance.csv')
+
             logging.info("Read the dataset as dataframe")
-            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
+
+            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True) ## All store in the same folder so, it is enough to cretae one logic 
 
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
+
             logging.info("Train test split initiated")
+
             train_set,test_set=train_test_split(df,test_size=0.20,random_state=42)
 
             train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
@@ -46,7 +53,10 @@ class DataIngestion:
         
 if __name__=="__main__":
     obj=DataIngestion()
-    obj.initate_data_ingestion()
+    test_data,train_data=obj.initiate_data_ingestion()
+
+    data_transformation = DataTransformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)
 
             
 
