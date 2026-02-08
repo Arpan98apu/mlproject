@@ -11,7 +11,7 @@ import sys
 import numpy as np
 import pandas as pd 
 from dataclasses import dataclass
-from src.utils import save_object
+from src.utils import save_object,evaluate_models
 
 
 @dataclass
